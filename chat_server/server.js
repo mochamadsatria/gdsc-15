@@ -2,30 +2,30 @@ const express = require("express");
 const app = express();
 const http = require("http").createServer(app);
 const io = require("socket.io")(http);
+const { v4: uuidv4 } = require('uuid');
 
-const rooms = [];
+const rooms = {};
 
 io.on("connection", (socket) => {
   console.log("a user connected");
 
   // handle room joining
-  socket.on("join room", (roomName) => {
-    console.log(`User joined room: ${roomName}`);
+  socket.on("join room", () => {
+    const roomId = uuidv4();
+    console.log(`User joined room: ${roomId}`);
 
-    // create a new room if it doesn't exist
-    if (!rooms.includes(roomName)) {
-      rooms.push(roomName);
-    }
+    // create a new room
+    rooms[roomId] = [];
 
     // join the room
-    socket.join(roomName);
-    socket.emit("room joined", roomName);
+    socket.join(roomId);
+    socket.emit("room joined", roomId);
   });
 
   // handle incoming messages
-  socket.on("chat message", (msg, roomName) => {
-    console.log(`Message received in room ${roomName}: ${msg}`);
-    io.to(roomName).emit("chat message", msg);
+  socket.on("chat message", (msg, roomId) => {
+    console.log(`Message received in room ${roomId}: ${msg}`);
+    io.to(roomId).emit("chat message", msg);
   });
 
   // handle disconnections
@@ -37,3 +37,4 @@ io.on("connection", (socket) => {
 http.listen(3000, () => {
   console.log("listening on *:3000");
 });
+This code generate
