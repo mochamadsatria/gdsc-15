@@ -1,40 +1,68 @@
-const express = require("express");
-const app = express();
-const http = require("http").createServer(app);
-const io = require("socket.io")(http);
-const { v4: uuidv4 } = require('uuid');
+const io = require("socket.io")(3000); // initialize the server and listen on port 3000
+const { v4: uuidv4 } = require("uuid");
 
-const rooms = {};
+let rooms = [];
 
 io.on("connection", (socket) => {
-  console.log("a user connected");
+  socket.on("login", (data) => {
+    // Check if there is an available room with less than 2 users
+    let availableRoomIndex = -1;
+    for (let i = 0; i < rooms.length; i++) {
+      if (rooms[i]["users"].length < 2) {
+        availableRoomIndex = i;
+        break;
+      }
+    }
 
-  // handle room joining
-  socket.on("join room", () => {
-    const roomId = uuidv4();
-    console.log(`User joined room: ${roomId}`);
+    if (availableRoomIndex !== -1) {
+      // Assign the user to the available room
 
-    // create a new room
-    rooms[roomId] = [];
+      rooms[availableRoomIndex]["users"].push(data["uid"]);
 
-    // join the room
-    socket.join(roomId);
-    socket.emit("room joined", roomId);
+      socket.join(rooms[availableRoomIndex]["roomId"]);
+
+      socket.emit("join_room", rooms[availableRoomIndex]);
+    } else {
+      // Create a new room for the user
+      const roomId = uuidv4();
+
+      rooms.push({
+        roomId: roomId,
+        users: [data["uid"]],
+      });
+
+      socket.join(roomId);
+
+      socket.emit("joined_room_and_wait_for_queue", {
+        roomId: roomId,
+        users: [data["uid"]],
+      });
+    }
   });
 
-  // handle incoming messages
-  socket.on("chat message", (msg, roomId) => {
-    console.log(`Message received in room ${roomId}: ${msg}`);
-    io.to(roomId).emit("chat message", msg);
+  socket.on("room_ready", (data) => {
+    // broadcast the message to all connected clients in the same room
+    io.to(data["roomId"]).emit("proceed_to_chat", data);
   });
 
-  // handle disconnections
-  socket.on("disconnect", () => {
-    console.log("a user disconnected");
+  // when a message is received from the client
+  socket.on("message", (data) => {
+    // broadcast the message to all connected clients in the same room
+    io.to(data["roomId"]).emit("message", data);
   });
+
+  socket.on("shutdown", function (data) {
+    io.sockets
+      .in(data["roomId"])
+      .adapter.nsp.sockets.forEach(function (socket, key) {
+        rooms.splice(
+          rooms.findIndex((roomItem) => roomItem.roomId == data.roomId),
+          1
+        );
+
+        socket.disconnect();
+      });
+  });
+
+  socket.on("disconnect", function () {});
 });
-
-http.listen(3000, () => {
-  console.log("listening on *:3000");
-});
-This code generate
