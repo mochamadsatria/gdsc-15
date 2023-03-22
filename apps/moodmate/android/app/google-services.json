@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "704106043",
+    "project_id": "moodmate-35b4a",
+    "storage_bucket": "moodmate-35b4a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:704106043:android:8c8f1959a02fd2f202961e",
+        "android_client_info": {
+          "package_name": "com.example.moodmate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "704106043-3ml1b5nmhbjchku9d3utesnn2fhl2v0m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgVJVPpfhRnDYyKte90MrDT3cHcXwHW54"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "704106043-3ml1b5nmhbjchku9d3utesnn2fhl2v0m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
