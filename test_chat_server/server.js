@@ -6,6 +6,11 @@ let rooms = [];
 io.on("connection", (socket) => {
   //let globalRoomId;
 
+  // socket.on("test", (data) => {
+  //   console.log(data);
+  //   socket.emit("test", "Hello!");
+  // });
+
   socket.on("login", (data) => {
     // Check if there is an available room with less than 2 users
     let availableRoomIndex = -1;

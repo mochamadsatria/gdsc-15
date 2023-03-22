@@ -4,6 +4,11 @@ const { v4: uuidv4 } = require("uuid");
 let rooms = [];
 
 io.on("connection", (socket) => {
+  // socket.on("test", (data) => {
+  //   console.log(data);
+  //   socket.emit("test", "Hello!");
+  // });
+
   socket.on("login", (data) => {
     // Check if there is an available room with less than 2 users
     let availableRoomIndex = -1;
