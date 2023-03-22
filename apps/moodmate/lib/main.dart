@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const HomeScreen(),//const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const SignInScreen(),//const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }

@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
 
-class PetOverviewScreen extends StatelessWidget {
+class PetOverviewScreen extends StatefulWidget {
   const PetOverviewScreen({super.key});
 
   @override
+  State<PetOverviewScreen> createState() => _PetOverviewScreen();
+}
+
+class _PetOverviewScreen extends State<PetOverviewScreen> {
+  @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: Container(),
+    return const Scaffold(
+      body: Center(
+        child: Text(
+          "Hello World",
+          style: TextStyle(fontSize: 24.0),
+        ),
       ),
     );
   }
