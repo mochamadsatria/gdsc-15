@@ -1,18 +1,16 @@
-const express = require("express");
-const app = express();
-const http = require("http").createServer(app);
-const io = require("socket.io")(http);
+const http = require("http");
+const server = http.createServer();
+const io = require("socket.io")(server);
 const { ExpressPeerServer } = require("peer");
-const peerServer = ExpressPeerServer(http);
+const { Server } = require("http");
 
 // Initialize the peer server
-app.use("/peerjs", peerServer);
-
-// Serve the client-side code
-// app.use(express.static(__dirname + "/public"));
+const peerServer = ExpressPeerServer(server, {
+  path: "/voice",
+});
 
 // Start the HTTP server
-http.listen(3000, () => {
+server.listen(3000, () => {
   console.log("Listening on port 3000");
 });
 
